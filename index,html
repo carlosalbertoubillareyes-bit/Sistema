@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Negocio - POS</title>
+    <style>
+        :root {
+            --bg: #1a2a3a;
+            --card: #243b53;
+            --ink: #f0f4f8;
+            --mut: #94a3b8;
+            --line: #334e68;
+            --pri: #06b6d4;
+            --pri-ink: #ffffff;
+            --acc: #f59e0b;
+            --acc-ink: #1e293b;
+            --bad: #ef4444;
+            --ok: #10b981;
+            --danger: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font: 15px/1.5 system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            padding-bottom: 85px;
+        }
+
+        header {
+            background: var(--card);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--line);
+        }
+
+        h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--mut);
+            margin-bottom: 16px;
+        }
+
+        input, select, button {
+            font: inherit;
+            color: inherit;
+            border: none;
+            border-radius: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            margin-bottom: 10px;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid var(--pri);
+            border-color: var(--pri);
+        }
+
+        button {
+            padding: 12px 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        button.primary {
+            background: var(--pri);
+            color: var(--pri-ink);
+            width: 100%;
+        }
+
+        button.success {
+            background: var(--ok);
+            color: white;
+        }
+
+        button.danger {
+            background: transparent;
+            color: var(--bad);
+        }
+
+        button.danger-fill {
+            background: var(--danger);
+            color: white;
+        }
+
+        button.sec {
+            background: transparent;
+            border: 1px solid var(--line);
+        }
+
+        button.cobrar {
+            background: var(--acc);
+            color: var(--acc-ink);
+            width: 100%;
+            font-size: 18px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-row button {
+            flex: 1;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .row > *:not(.no-grow) {
+            flex: 1;
+        }
+
+        .item {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line);Codigo inicial
