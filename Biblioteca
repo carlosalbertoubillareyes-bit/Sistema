@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biblioteca Académica y Profesional</title>
+<style>
+:root{--bg:#efe9dc;--paper:#fffdf8;--ink:#1f2430;--mute:#6b6f7a;--line:#e1d9c6;--brand:#1f3a5f;--accent:#9c7a3c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171d;--paper:#1c212a;--ink:#ebedf1;--mute:#9aa3b1;--line:#2c3441;--brand:#8fb1e0;--accent:#d3b27a}}
+:root[data-theme="dark"]{--bg:#14171d;--paper:#1c212a;--ink:#ebedf1;--mute:#9aa3b1;--line:#2c3441;--brand:#8fb1e0;--accent:#d3b27a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.75 Georgia,"Times New Roman",serif}
+header{background:var(--brand);color:#fff;padding:22px 18px 0;text-align:center}
+.wrap{max-width:1000px;margin:0 auto}
+h1{margin:0;font:600 26px/1.2 Georgia,serif;letter-spacing:.5px}
+.sub{margin:4px 0 14px;font:14px system-ui,sans-serif;opacity:.85}
+nav{display:flex;gap:3px;overflow-x:auto;text-align:left}
+nav button{font:600 13px system-ui,sans-serif;background:transparent;color:#dfe7f3;border:0;padding:11px 14px;border-radius:8px 8px 0 0;cursor:pointer;white-space:nowrap}
+nav button[aria-selected="true"]{background:var(--bg);color:var(--brand)}
+main{max-width:860px;margin:0 auto;padding:24px 14px 60px}
+.book{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:28px 26px;box-shadow:0 2px 14px rgba(0,0,0,.08)}
+.book>h2{font:600 24px Georgia,serif;margin:0;color:var(--brand);text-align:center}
+.book>.rule{height:2px;width:70px;background:var(--accent);margin:10px auto 14px}
+p.lead{margin:0 0 16px;color:var(--mute);font:14px/1.55 system-ui,sans-serif;text-align:center}
+label{display:block;font:600 13px system-ui,sans-serif;margin:12px 0 6px}
+textarea,input{width:100%;font:15px/1.5 system-ui,sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+button.p{font:600 14px system-ui,sans-serif;background:var(--brand);color:#fff;border:0;border-radius:8px;padding:11px 18px;cursor:pointer}
+:root[data-theme="dark"] button.p,:root:not([data-theme="light"]) button.p{color:#10151c}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) button.p{color:#fff}}
+button.s{font:600 14px system-ui,sans-serif;background:transparent;color:var(--brand);border:1px solid var(--line);border-radius:8px;padding:10px 16px;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+.out{margin-top:22px;border-top:1px solid var(--line);padding-top:6px}
+.out h3{font:600 20px Georgia,serif;color:var(--brand);margin:26px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.out h4{font:600 16px Georgia,serif;margin:16px 0 4px}
+.out p{text-align:justify;margin:.6em 0}
+.out ul{padding-left:22px}
+.out pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font:13px/1.5 ui-monospace,Menlo,monospace;white-space:pre}
+.out code{font:14px ui-monospace,Menlo,monospace;background:var(--bg);padding:1px 5px;border-radius:4px}
+.note{font:13px/1.5 system-ui,sans-serif;color:var(--mute);margin-top:12px}
+.err{color:#b3261e;font:14px system-ui,sans-serif;margin-top:10px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pill{font:12px system-ui,sans-serif;border:1px solid var(--line);border-radius:99px;padding:4px 10px;color:var(--mute)}
+.op{border-top:1px solid var(--line);padding:12px 0}
+.op small{color:var(--mute);font:12px system-ui,sans-serif}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Biblioteca Académica y Profesional</h1>
+<p class="sub">Un libro que responde como tú lo necesitas: estudio, informática, comercio y finanzas</p>
+<nav role="tablist" id="nav"></nav></div></header>
+<main id="main"></main>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const MATRIZ=["Índice sin numeración","Introducción","Objetivo general","Objetivos específicos","Metodología","Fundamentos","Explicación","Solución aplicada","Próximos pasos","Conclusión","Bibliografía internacional","Algoritmo","Diagrama de flujo","Qué busca el docente"];
+
+const BASE=`Eres un catedrático y profesional senior con excelencia académica. Redacta en español con prosa elevada, elaborada y clara, como un libro bien escrito. Usa títulos con # sin números ni numeración alguna, ni en títulos ni en índices. Explica siempre el porqué de cada decisión y usa ejemplos del mismo caso planteado, no solo teoría. Aborda tanto el plano académico como el profesional y real. Cita únicamente fuentes internacionales reales y verificables (autor, año, institución); si dudas de una fuente, dilo. Cierra con una sección # Mejor desarrollo recomendado que indique cómo mejorar y qué hacer a continuación. Responde solo con el contenido pedido.`;
+const TRABAJO=`Desarrolla un trabajo completo con esta estructura: # Índice (lista sin números); # Introducción; # Objetivo general; # Objetivos específicos; # Metodología; # Fundamentos; # Explicación; # Solución aplicada; # Algoritmo y # Diagrama de flujo (en texto, paso a paso) cuando el tema lo admita; # Próximos pasos; # Conclusión; # Bibliografía.`;
+
+const AREAS=[
+{id:"inicio",tab:"Inicio",title:"Lo que se me solicita",lead:"Pega la instrucción del docente o cualquier trabajo que aparezca. Recibirás la respuesta concisa, el desarrollo proyectado, cómo y en qué generarlo, y tres métodos de trabajo.",ph:"Ej.: Elaborar un informe técnico sobre la seguridad de una aplicación web, con rúbrica de 6 criterios…",btn:"Analizar y proyectar",
+ p:t=>`Enunciado recibido:\n"""${t}"""\n\nEntrega: # Respuesta concisa; # Qué busca el docente; # Desarrollo proyectado; # Cómo y en qué lo generaremos; # Tres métodos de trabajo (compara eficiencia, ventajas y riesgos, y recomienda uno); # Próximos pasos.`,matriz:true},
+{id:"estudio",tab:"Trabajo de estudio",title:"Trabajo de estudio completo",lead:"Escribe el tema, la pregunta o la exigencia del docente. Esta pestaña desarrolla el trabajo entero, de la portada de ideas a la bibliografía.",ph:"Ej.: Defensa en profundidad frente a un ciberataque en una empresa de comercio electrónico…",btn:"Desarrollar trabajo completo",
+ p:t=>`Tema o exigencia:\n"""${t}"""\n\n`+TRABAJO,send:true},
+{id:"ciber",tab:"Ciberseguridad",title:"Ciberseguridad",lead:"Explicación total: amenazas, protecciones, normativa, auditoría y hacking ético, siempre con lo que hizo el atacante y por qué funciona cada defensa.",ph:"Ej.: Explica la inyección SQL y cómo defenderse en una aplicación PHP con MySQL…",btn:"Explicar y desarrollar",
+ p:t=>`Área: ciberseguridad (seguridad física y lógica, redes, aplicaciones, criptografía, gestión de riesgo, normas internacionales como ISO 27001, NIST y OWASP, hacking ético). Para cada caso explica qué hizo el atacante, el porqué de cada protección y el impacto real. Solo con enfoque defensivo y educativo.\n\nConsulta:\n"""${t}"""\n\n`+TRABAJO},
+{id:"algo",tab:"Crear algoritmos",title:"Algoritmos y diagramas de flujo",lead:"Variables, tipos de datos, condicionales, bucles, funciones, estructuras de datos y complejidad, con pseudocódigo y diagrama de flujo.",ph:"Ej.: Algoritmo para calcular el total de una venta con descuentos, con diagrama de flujo…",btn:"Explicar y construir",
+ p:t=>`Área: algoritmia y lógica de programación. Explica desde cero lo que el caso requiera: variables, tipos de datos, operadores, condicionales, bucles, funciones, arreglos, recursión y complejidad. Incluye pseudocódigo, un diagrama de flujo descrito paso a paso (nodos: inicio, proceso, decisión, fin) y una prueba de escritorio con datos del mismo caso.\n\nConsulta:\n"""${t}"""`},
+{id:"prog",tab:"Programación",title:"Lenguajes y desarrollo de software",lead:"Java, Python, C++, JavaScript, PHP, HTML, CSS, SQL y más: sintaxis, buenas prácticas, arquitectura, pruebas y código funcional.",ph:"Ej.: Crea en Python y en Java una clase Producto con inventario, y compáralas…",btn:"Explicar y programar",
+ p:t=>`Área: ingeniería de software y desarrollo. Cubre todos los lenguajes pertinentes (Java, Python, C, C++, C#, JavaScript, TypeScript, PHP, HTML, CSS, SQL, entre otros). Entrega explicación, código limpio y comentado en bloques de código, buenas prácticas, manejo de errores, pruebas y, si corresponde, comparación entre lenguajes.\n\nConsulta:\n"""${t}"""`},
+{id:"trad",tab:"Traducción",title:"Traducción y comparación internacional",lead:"Traduce textos entre idiomas con matices de registro y compara prácticas, normas o enfoques entre países.",ph:"Texto a traducir, o tema a comparar entre países…",btn:"Traducir o comparar",lang:true,
+ p:(t,l)=>`Área: traducción y comparación internacional. Si el usuario entrega un texto, tradúcelo al idioma destino "${l||"inglés"}", ofrece una versión formal y otra natural, y explica los matices. Si entrega un tema, haz una comparación internacional (países o normas relevantes) en tabla de texto y análisis.\n\nContenido:\n"""${t}"""`},
+{id:"comex",tab:"Comercio y marketing",title:"Comercio exterior, ingeniería comercial y marketing",lead:"Importación y exportación, Incoterms, aduanas, estrategia comercial, mercado y marketing digital.",ph:"Ej.: Plan para exportar chocolates desde Chile, con Incoterms y plan de marketing…",btn:"Desarrollar",
+ p:t=>`Área: comercio exterior, ingeniería comercial y marketing (Incoterms, regulación aduanera, logística internacional, tratados comerciales, análisis de mercado, las 4P, embudo de ventas, marketing digital). Aporta ejemplos reales y un plan accionable.\n\nConsulta:\n"""${t}"""\n\n`+TRABAJO},
+{id:"fin",tab:"Finanzas y acciones",title:"Estudio financiero y acciones",lead:"Análisis financiero, razones, flujo de caja, valoración y mercado bursátil, con fines educativos.",ph:"Ej.: Cómo analizar una acción: razones financieras, riesgo y diversificación…",btn:"Analizar",
+ p:t=>`Área: estudio financiero y mercado de acciones (estados financieros, razones, flujo de caja, VAN y TIR, valoración, riesgo, diversificación, análisis fundamental y técnico). Es contenido educativo: no entregues recomendaciones de inversión personalizadas ni garantías de rentabilidad, explica la metodología y los riesgos, e indica que no es asesoría financiera.\n\nConsulta:\n"""${t}"""\n\n`+TRABAJO},
+{id:"algo2",tab:"Algoritmo de la plataforma",title:"Algoritmo de la plataforma",lead:"Cómo piensa la plataforma, paso a paso: explicación, pseudocódigo, código real y diagrama de flujo.",stat:true,html:`<div class='out'><h3>Qué hace</h3><p>La plataforma recibe tu consulta, le suma las reglas de excelencia académica y la especialidad de la pestaña elegida, la envía al motor de IA y te muestra la respuesta con formato de libro. Después puedes copiarla, enviarla al resumen o escribir tu opinión.</p><h3>Pseudocódigo</h3><pre>INICIO\n  MOSTRAR pestañas\n  ELEGIR pestaña\n  LEER consulta\n  SI consulta está vacía ENTONCES\n    MOSTRAR aviso y volver a leer\n  SINO\n    instrucción ← reglas_base + especialidad + consulta\n    ENVIAR instrucción al motor de IA\n    SI hay respuesta ENTONCES\n      MIENTRAS llegue texto HACER\n        MOSTRAR texto con formato de libro\n      FIN MIENTRAS\n    SINO\n      MOSTRAR error\n    FIN SI\n  FIN SI\n  OPCIONES: copiar, enviar a resumen, guardar opinión\nFIN</pre><h3>Código real en JavaScript</h3><p>Es el mismo algoritmo del pseudocódigo, escrito en el lenguaje con que funciona la plataforma.</p><pre>async function consultar(area, consulta, idioma) {\n  if (consulta.trim() === '') {\n    mostrarAviso('Escribe primero tu consulta.');\n    return;\n  }\n  var instruccion = REGLAS_BASE + ' ' + area.especialidad(consulta, idioma);\n  var motor = await obtenerMotorIA();\n  if (motor === null) {\n    mostrarError('Motor de IA no disponible.');\n    return;\n  }\n  try {\n    var respuesta = await motor(instruccion, {\n      alRecibirTexto: function (parcial) {\n        pantalla.innerHTML = formatoLibro(parcial);\n      }\n    });\n    pantalla.innerHTML = formatoLibro(respuesta.text);\n  } catch (error) {\n    mostrarError('No se pudo completar la solicitud.');\n  }\n}</pre><h3>El mismo algoritmo en Python</h3><pre>def consultar(area, consulta, idioma=''):\n    if consulta.strip() == '':\n        mostrar_aviso('Escribe primero tu consulta.')\n        return\n    instruccion = REGLAS_BASE + ' ' + area.especialidad(consulta, idioma)\n    motor = obtener_motor_ia()\n    if motor is None:\n        mostrar_error('Motor de IA no disponible.')\n        return\n    try:\n        for parcial in motor.generar(instruccion):\n            mostrar(formato_libro(parcial))\n    except Exception:\n        mostrar_error('No se pudo completar la solicitud.')</pre><h3>Cómo se lee</h3><ul><li><b>Condicional:</b> el primer si revisa que la consulta no esté vacía; si lo está, avisa y termina.</li><li><b>Variable:</b> instruccion une las reglas base, la especialidad de la pestaña y tu consulta.</li><li><b>Decisión:</b> si el motor de IA no está disponible, muestra el error.</li><li><b>Ciclo:</b> mientras llega el texto parcial, lo vuelve a mostrar con formato de libro.</li><li><b>Manejo de errores:</b> el bloque try y catch evita que la página se caiga si algo falla.</li></ul><h3>Diagrama de flujo</h3><svg viewBox='0 0 420 590' width='100%' style='max-width:460px;display:block;margin:0 auto;font:12px system-ui,sans-serif'><defs><marker id='ar' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='7' markerHeight='7' orient='auto'><path d='M0 0L10 5L0 10z' fill='var(--brand)'/></marker></defs><g stroke='var(--brand)' stroke-width='1.5' fill='none'><rect x='140' y='8' width='100' height='32' rx='16'/><path d='M190 40V66' marker-end='url(#ar)'/><rect x='90' y='68' width='200' height='42'/><path d='M190 110V125' marker-end='url(#ar)'/><path d='M190 125L280 165L190 205L100 165Z'/><path d='M280 165H305' marker-end='url(#ar)'/><rect x='305' y='148' width='110' height='34'/><path d='M360 148V90H290' marker-end='url(#ar)'/><path d='M190 205V232' marker-end='url(#ar)'/><rect x='80' y='234' width='220' height='44'/><path d='M190 278V302' marker-end='url(#ar)'/><rect x='110' y='304' width='160' height='36'/><path d='M190 340V360' marker-end='url(#ar)'/><path d='M190 360L280 400L190 440L100 400Z'/><path d='M280 400H305' marker-end='url(#ar)'/><rect x='305' y='383' width='110' height='34'/><path d='M190 440V468' marker-end='url(#ar)'/><rect x='95' y='470' width='190' height='40'/><path d='M190 510V538' marker-end='url(#ar)'/><rect x='80' y='540' width='220' height='36' rx='18'/></g><g fill='var(--ink)' text-anchor='middle'><text x='190' y='29'>Inicio</text><text x='190' y='94'>Elegir pestaña y escribir consulta</text><text x='190' y='169'>¿Consulta vacía?</text><text x='360' y='169'>Mostrar aviso</text><text x='190' y='254'>Armar instrucción:</text><text x='190' y='270'>reglas + especialidad + consulta</text><text x='190' y='326'>Enviar al motor de IA</text><text x='190' y='404'>¿Hay respuesta?</text><text x='360' y='404'>Mostrar error</text><text x='190' y='494'>Mostrar texto como libro</text><text x='190' y='562'>Copiar · Resumen · Opinión · Fin</text><text x='296' y='158' fill='var(--mute)'>Sí</text><text x='200' y='222' fill='var(--mute)'>No</text><text x='296' y='393' fill='var(--mute)'>No</text><text x='200' y='458' fill='var(--mute)'>Sí</text></g></svg></div>`},
+{id:"tema",tab:"Tema de título",title:"Recomendación de tema de tesis o título",lead:"Cuéntame tu carrera, tus intereses y el tipo de trabajo (tesis, proyecto de título o informe). Recibirás temas recomendados con su viabilidad.",ph:"Ej.: Ingeniería en Informática; me interesan la ciberseguridad y el desarrollo de software; quiero un proyecto aplicable a una empresa real…",btn:"Recomendar temas",
+ p:t=>`Área: orientación de trabajos de título y tesis. Con los datos del estudiante propone cinco temas, y para cada uno entrega: # Tema; justificación académica y profesional; problema que resuelve; pregunta de investigación; metodología sugerida; viabilidad (tiempo, datos, costo); riesgos; y relevancia internacional. Cierra recomendando cuál elegir y por qué, y qué tipo de trabajo conviene (tesis, proyecto aplicado o estudio de caso).\n\nDatos del estudiante:\n"""${t}"""`},
+{id:"tesis",tab:"Tesis y título",title:"Desarrollo de tesis o trabajo de título",lead:"Escribe el tema elegido. Se desarrolla el documento completo con rigor metodológico, listo para pulir y defender.",ph:"Ej.: Modelo de defensa en profundidad para pymes de comercio electrónico en Chile…",btn:"Desarrollar tesis o trabajo de título",send:true,
+ p:t=>`Área: tesis y trabajos de título. Desarrolla el documento con esta estructura, sin numeración: # Índice; # Resumen; # Introducción; # Planteamiento del problema; # Pregunta de investigación e hipótesis; # Objetivo general; # Objetivos específicos; # Justificación; # Alcances y limitaciones; # Marco teórico y estado del arte internacional; # Metodología (diseño, población o caso, instrumentos, análisis); # Solución o propuesta aplicada; # Resultados esperados; # Cronograma; # Conclusiones; # Recomendaciones y próximos pasos; # Bibliografía. Mantén coherencia entre problema, objetivos, metodología y conclusiones.\n\nTema:\n"""${t}"""`},
+{id:"defensa",tab:"Defensa",title:"Preparación de la defensa",lead:"Pega el resumen de tu tesis o trabajo de título. Recibirás el guion con tiempos, las diapositivas, las preguntas difíciles de la comisión con sus respuestas y consejos para defender bien.",ph:"Pega aquí el resumen, los objetivos y la propuesta de tu trabajo…",btn:"Preparar defensa",
+ p:t=>`Área: defensa de tesis y de título. Entrega: # Qué busca la comisión; # Guion de la presentación con tiempos (apertura, problema, objetivos, metodología, resultados, aporte, conclusión, cierre); # Estructura de diapositivas (qué lleva cada una); # Preguntas difíciles que hará la comisión (al menos diez, con respuesta modelo fundamentada); # Cómo responder cuando no sabes algo; # Oratoria, manejo de nervios y presencia; # Errores comunes que evitar; # Lista de verificación para el día de la defensa.\n\nTrabajo a defender:\n"""${t}"""`},
+{id:"resumen",tab:"Resumen de estudio",title:"Resumen de estudio",lead:"Una redacción corta para leer y aprender con calma, con preguntas de ensayo antes de dar tu opinión.",ph:"Pega aquí el trabajo desarrollado…",btn:"Crear resumen de estudio",
+ p:t=>`Texto base:\n"""${t}"""\n\nEntrega un resumen de estudio corto: # Idea central (3 líneas); # Lo esencial (5 a 7 viñetas); # Términos clave; # Ejemplo del mismo caso; # Preguntas para ensayar (5); # Espacio para tu opinión (3 preguntas guía).`,id2:"resumen"},
+{id:"opin",tab:"Mis opiniones",title:"Mis opiniones",lead:"Tras leer el resumen, registra tu postura con tus propias palabras. Se guardan en este navegador.",opin:true}
+];
+
+/* Render Markdown con bloques de código */
+function md(t){const parts=t.split(/```/);let h="";
+parts.forEach((seg,i)=>{if(i%2){h+="<pre>"+esc(seg.replace(/^[^\n]*\n/,""))+"</pre>";return}
+let ul=false;const inl=s=>s.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`(.+?)`/g,"<code>$1</code>");
+for(const raw of seg.split("\n")){const l=esc(raw);const li=l.match(/^\s*[-*•]\s+(.*)/);
+if(li){if(!ul){h+="<ul>";ul=true}h+="<li>"+inl(li[1])+"</li>";continue}
+if(ul){h+="</ul>";ul=false}
+const m=l.match(/^(#{1,4})\s+(.*)/);
+if(m)h+=m[1].length<=2?"<h3>"+inl(m[2])+"</h3>":"<h4>"+inl(m[2])+"</h4>";
+else if(l.trim())h+="<p>"+inl(l)+"</p>"}
+if(ul)h+="</ul>"});return h}
+
+AREAS.splice(1,0,AREAS.splice(AREAS.findIndex(function(a){return a.id==="algo2"}),1)[0]);
+/* Construcción de pestañas y páginas */
+const nav=$("nav"),main=$("main");
+AREAS.forEach(a=>{
+ const b=document.createElement("button");b.textContent=a.tab;b.setAttribute("role","tab");b.dataset.t=a.id;b.setAttribute("aria-selected",a.id==="inicio");nav.appendChild(b);
+ const s=document.createElement("section");s.id="s_"+a.id;s.hidden=a.id!=="inicio";
+ let h='<div class="book"><h2>'+a.title+'</h2><div class="rule"></div><p class="lead">'+a.lead+'</p>';
+ if(a.stat){h+=a.html}else if(a.opin){h+='<label for="ot">Tema</label><input id="ot" placeholder="Tema o trabajo"><label for="ox">Mi opinión</label><textarea id="ox" placeholder="Lo que pienso, lo que aprendí, lo que cuestiono…"></textarea><div class="row"><button class="p" id="bsave">Guardar opinión</button><button class="s" id="bpol">Pulir redacción</button></div><div class="err" id="e_pol" hidden></div><div class="out" id="o_pol" hidden></div><div class="out" id="list"></div>'}
+ else{h+='<label for="t_'+a.id+'">Consulta</label>';
+  if(a.lang)h+='<input id="l_'+a.id+'" placeholder="Idioma destino (ej.: inglés, alemán, portugués)" style="margin-bottom:8px">';
+  h+='<textarea id="t_'+a.id+'" placeholder="'+a.ph+'"></textarea><div class="row"><button class="p" id="b_'+a.id+'">'+a.btn+'</button><button class="s" id="c_'+a.id+'">Copiar</button>';
+  if(a.send)h+='<button class="s" id="x_'+a.id+'">Enviar a Resumen</button>';
+  h+='</div><div class="err" id="e_'+a.id+'" hidden></div><div class="out" id="o_'+a.id+'" hidden></div>';
+  if(a.matriz)h+='<div class="out"><h4 style="text-align:center">Matriz de excelencia aplicada a todo trabajo</h4><div class="pills">'+MATRIZ.map(m=>'<span class="pill">'+m+'</span>').join("")+'</div></div>';
+  if(a.id==="fin")h+='<p class="note">Contenido educativo; no constituye asesoría financiera.</p>'}
+ s.innerHTML=h+'</div>';main.appendChild(s)});
+function go(t){AREAS.forEach(a=>$("s_"+a.id).hidden=a.id!==t);nav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===t));window.scrollTo(0,0)}
+nav.onclick=e=>{const b=e.target.closest("button");if(b)go(b.dataset.t)};
+
+/* Motor de IA */
+async function run(key,prompt,btn,out,err){
+ err.hidden=true;let sample=null;try{sample=await claude.use("sample")}catch(e){}
+ if(!sample){err.textContent="El motor de IA no está disponible en esta vista. En la versión de GitHub debes conectar tu propio servicio de IA.";err.hidden=false;return}
+ btn.disabled=true;out.hidden=false;out.innerHTML='<p class="note">Desarrollando…</p>';
+ try{const r=await sample(BASE+"\n\n"+prompt,{modelTier:"complex",cache:false,onText:({text})=>{out.innerHTML=md(text)}});out.innerHTML=md(r.text);out.dataset.raw=r.text}
+ catch(e){out.hidden=true;err.textContent=e&&e.code==="not_granted"?"Se necesita tu permiso para usar el motor de IA.":"No se pudo completar la solicitud. Intenta nuevamente.";err.hidden=false}
+ btn.disabled=false}
+AREAS.filter(a=>!a.opin&&!a.stat).forEach(a=>{
+ const T=$("t_"+a.id),O=$("o_"+a.id),E=$("e_"+a.id),B=$("b_"+a.id);
+ B.onclick=()=>{if(!T.value.trim()){E.textContent="Escribe primero tu consulta.";E.hidden=false;return}
+  run(a.id,a.p(T.value,a.lang?$("l_"+a.id).value:""),B,O,E)};
+ const C=$("c_"+a.id);C.onclick=async()=>{try{await navigator.clipboard.writeText(O.dataset.raw||O.innerText);C.textContent="Copiado"}catch(e){C.textContent="No se pudo copiar"}setTimeout(()=>C.textContent="Copiar",1600)};
+ if(a.send)$("x_"+a.id).onclick=()=>{$("t_resumen").value=O.dataset.raw||"";go("resumen")}});
+
+/* Opiniones */
+const KEY="biblioteca-opiniones";
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}};
+const save=a=>{try{localStorage.setItem(KEY,JSON.stringify(a))}catch(e){}};
+function draw(){const a=load(),l=$("list");
+ l.innerHTML='<h3>Opiniones guardadas</h3>'+(a.length?a.map((o,i)=>'<div class="op"><b>'+esc(o.t||"Sin tema")+'</b> <small>'+esc(o.d)+'</small><p>'+esc(o.x)+'</p><button class="s" data-del="'+i+'">Eliminar</button></div>').join(""):'<p class="note">Aún no hay opiniones guardadas.</p>');
+ l.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const a=load();a.splice(+b.dataset.del,1);save(a);draw()})}
+$("bsave").onclick=()=>{const x=$("ox").value.trim();if(!x){$("e_pol").textContent="Escribe tu opinión antes de guardar.";$("e_pol").hidden=false;return}
+ $("e_pol").hidden=true;const a=load();a.unshift({t:$("ot").value.trim(),x,d:new Date().toLocaleDateString("es-CL")});save(a);$("ot").value="";$("ox").value="";$("o_pol").hidden=true;draw()};
+$("bpol").onclick=()=>{const x=$("ox").value.trim();if(!x){$("e_pol").textContent="Escribe tu opinión primero.";$("e_pol").hidden=false;return}
+ run("pol",`Reescribe esta opinión personal de forma más ilustre y bien elaborada, conservando exactamente sus ideas y su postura, en primera persona:\n"""${x}"""`,$("bpol"),$("o_pol"),$("e_pol"))};
+draw();
+</script>
+</body>
+</html>
